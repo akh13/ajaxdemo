@@ -1,15 +1,65 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-  </head>
-  <body>
-    <h1>AJAX DEMO</h1>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <h1>AJAX DEMO</h1>
+  <button class="out1">Pull a list of interests</button>
+  <button class="out2">Pull a lists of programming topics</button>
+  <button class="out3">DO EVERYTHING!</button>
+  <ul class="js output"></ul>
+  <ul class="js output2"></ul>
+  <ul class="js output3"></ul>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+<script>
+$("button.out1").click(function() {
+  $(".js").empty();
+  $.getJSON("http://www.mattbowytz.com/simple_api.json?data=interests",
+    function(data) {
+      $(data).each(function(idx, obj) {
+        $(obj.data).each(function(key, value) {
+          $(".output").append("<li>" + value + "</li>");
+          $("button.out1").prop("disabled", true);
+          $("button.out2").prop("disabled", false);
+          $("button.out3").prop("disabled", false);
+        });
+      });
+    });
+});
+$("button.out2").click(function() {
+  $(".js").empty();
+  $.getJSON("http://www.mattbowytz.com/simple_api.json?data=programming",
+    function(data) {
+      $(data).each(function(idx, obj) {
+        $(obj.data).each(function(key, value) {
+          $(".output2").append("<li>" + value + "</li>");
+          $("button.out1").prop("disabled", false);
+          $("button.out2").prop("disabled", true);
+          $("button.out3").prop("disabled", false);
+        });
+      });
+    });
+});
+$("button.out3").click(function() {
+  $(".js").empty();
+  $.getJSON("http://www.mattbowytz.com/simple_api.json?data=all",
+    function(data) {
+      var biglist = $(data.data.programming.concat(data.data.interests));
+      $(biglist).each(function(index) {
+        $(".output3").append("<li>" + biglist[index] + "</li>");
+        $("button.out1").prop("disabled", false);
+        $("button.out2").prop("disabled", false);
+        $("button.out3").prop("disabled", true);
+      });
+    });
+});
+</script>
+
 </html>
